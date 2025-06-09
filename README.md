@@ -125,9 +125,6 @@ mvn clean install -Dproject.build.outputTimestamp=DATE
 ### Stacktrace e comandi Threads
 ![stacktrace and threads](https://i.imgur.com/XY7r9wz.png)
 
-### Comando Ping
-![ping command](https://i.imgur.com/LITJKWw.png)
-
 ### Thread Sampler (Comando Monitor)
 ![thread sample](https://i.imgur.com/OXOakN6.png)
 
