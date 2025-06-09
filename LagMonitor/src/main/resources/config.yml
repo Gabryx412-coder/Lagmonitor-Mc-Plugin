@@ -1,0 +1,86 @@
+# Config principale di ${project.name}
+
+# Se questa opzione è attivata, questo plugin controllerà gli eventi che dovrebbero essere eseguiti sul thread principale.
+# Se non è così, il plugin lancerà un'eccezione per informarti.
+# In questo modo puoi individuare problemi di sicurezza dei thread che potrebbero causare ConcurrentModificationException
+# o altri problemi.
+thread-safety-check: true
+
+# Controlla periodicamente se un server (in particolare un plugin) sta eseguendo operazioni di I/O su blocchi nel thread principale.
+# Operazioni come richieste SQL, HTTP, file o connessioni socket dovrebbero essere eseguite in un thread separato.
+# Se non è così, il server aspetta la risposta e questo causa lag.
+#
+# Questo può essere utile per plugin che usano pool di thread, dove la connessione è inizializzata in background,
+# ma i dati sono recuperati nel thread principale (es. pool database SQL Hikari).
+# Le opzioni seguenti non possono rilevare questo caso.
+thread-block-detection: false
+
+# Fa la stessa cosa dell'opzione sopra, ma garantisce migliori prestazioni.
+# Questo significa che può controllare solo connessioni Socket -> HTTP, SQL, ma non operazioni su file.
+socket-block-detection: true
+
+# Questo sistema è più efficiente rispetto al metodo sopra (thread-block detection).
+# Impostando un nuovo security manager possiamo ricevere le operazioni sopra come eventi senza dover controllare periodicamente.
+# Attenzione: questo può sovrascrivere il security manager esistente, eventualmente impostato dal tuo hoster.
+securityMangerBlockingCheck: true
+
+# Se vedi qualcosa come: "Server sta eseguendo una connessione socket in threading ..." seguito da una lunga lista di "at .."
+# Probabilmente è uno delle quattro funzionalità sopra. L'ultima parte è lo stacktrace.
+# Questo aiuta gli sviluppatori a capire dove si stava eseguendo il codice per trovare la causa.
+#
+# Se lo sviluppatore non è raggiungibile o è troppo complicato per te, puoi disattivarlo qui.
+# Riceverai comunque l'avviso ma senza lo stacktrace.
+hideStacktrace: false
+
+# Mostra l'avviso sopra solo una volta per plugin
+oncePerPlugin: false
+
+# Collegandoci alla gestione della rete di Minecraft possiamo leggere quanti byte
+# il server sta ricevendo o inviando.
+traffic-counter: true
+
+# Se attivi questa opzione, salverà periodicamente alcuni dati di monitoraggio in un database MySQL
+# Dove potrai trovare fonti di lag con uno storico
+# E potresti creare un'interfaccia web per monitorare il server
+monitor-database: false
+
+# Configurazione database
+# Si consiglia l'uso di MariaDB (versione migliorata di MySQL)
+host: 127.0.0.1
+port: 3306
+database: lagmonitor
+usessl: false
+username: myUser
+password: myPassword
+tablePrefix: 'lgm_'
+
+# Intervalli in secondi
+
+# Contiene l'attuale TPS e un timestamp aggiornato
+tps-save-interval: 300
+
+# Contiene alcune informazioni di monitoraggio per analizzare i log
+monitor-save-interval: 900
+
+# Informazioni sul server utili da vedere ma non necessariamente utili per trovare le cause di lag
+# Per esempio:
+#   * nativo
+#   * contatore traffico Minecraft
+#   * scritture e letture specifiche del processo Minecraft
+native-save-interval: 1200
+
+# Un modo indipendente dai permessi per consentire certi comandi
+#
+# Tutto inizia con 'allow-' seguito dal nome del comando
+#
+# Puoi aggiungere tutti i comandi che vuoi
+# Se il comando non è presente qui, non sarà consentito
+# Chi ha il permesso per quel comando potrà usarlo.
+#
+# Esempio per il comando nativo:
+# allow-native:
+#     - PlayerName
+#     - Example
+allow-commandname:
+    - PlayerName
+    - Example

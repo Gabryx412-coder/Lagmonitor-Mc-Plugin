@@ -1,0 +1,124 @@
+# project data for Bukkit in order to register our plugin with all it components
+# ${-} are variables from Maven (pom.xml) which will be replaced after the build
+name: ${project.name}
+version: ${project.version}-${git.commit.id.abbrev}
+main: ${project.groupId}.${project.artifactId}.${project.name}
+
+# meta data for plugin managers
+authors: [gabrycoder, 'https://github.com/Gabriele-Mer/LagMonitor/graphs/contributors']
+description: |
+    ${project.description}
+website: ${project.url}
+dev-url: ${project.url}
+
+# This plugin don't have to be transformed for compatibility with Minecraft >= 1.13
+api-version: 1.16
+
+libraries:
+    - net.java.dev.jna:jna:5.12.1
+
+commands:
+    lagmonitor:
+        description: 'Gets displays the help page of all lagmonitor commands'
+        permission: ${project.artifactId}.command.help
+    ping:
+        description: 'Gets the ping of the selected player'
+        usage: '/<command> [player]'
+        permission: ${project.artifactId}.command.ping
+    stacktrace:
+        description: 'Gets the execution stacktrace of selected thread'
+        usage: '/<command> [threadName]'
+        permission: ${project.artifactId}.command.stacktrace
+    thread:
+        description: 'Outputs all running threads with their current state'
+        usage: '/<command> [dump]'
+        aliases: [threads]
+        permission: ${project.artifactId}.command.thread
+    tpshistory:
+        description: 'Outputs the current tps'
+        aliases: [tps, lag]
+        permission: ${project.artifactId}.command.tps
+    mbean:
+        description: 'Outputs mbeans attributes (java environment information)'
+        aliases: [bean]
+        usage: '/<command> [beanName] [attribute]'
+        permission: ${project.artifactId}.command.mbean
+    system:
+        description: 'Gives you some general information (Minecraft server related)'
+        permission: ${project.artifactId}.command.system
+    timing:
+        description: 'Outputs your server timings ingame'
+        permission: ${project.artifactId}.command.timing
+    monitor:
+        description: 'Monitors the CPU usage of methods'
+        permission: ${project.artifactId}.command.monitor
+        usage: '/<command> [start/stop]'
+        aliases: [profile, profiler, prof]
+    graph:
+        description: 'Gives you visual graph about your server'
+        usage: '/<command> [heap/cpu/threads/classes]'
+        permission: ${project.artifactId}.command.graph
+    environment:
+        description: 'Gives you some general information (OS related)'
+        permission: ${project.artifactId}.command.environment
+        aliases: [env]
+    native:
+        description: 'Gives you information about your Hardware'
+        permission: ${project.artifactId}.command.native
+    vm:
+        description: 'Gives you information about your Hardware'
+        aliases: [virtualmachine, machine, virtual]
+        permission: ${project.artifactId}.command.vm
+    network:
+        description: 'Gives you information about your Network configuration'
+        aliases: [net]
+        permission: ${project.artifactId}.command.network
+    tasks:
+        description: 'Information about running and pending tasks'
+        aliases: [task]
+        permission: ${project.artifactId}.command.tasks
+    heap:
+        description: 'Heap dump about your current memory'
+        aliases: [ram, memory]
+        usage: /<command> [dump]
+        permission: ${project.artifactId}.command.heap
+    lagpage:
+        description: 'Pages command for the current pagination session'
+        usage: '/<command> <next/prev/number>'
+    jfr:
+        description: |
+            'Manages the Java Flight Recordings of the native Java VM. It gives you much more detailed information
+            including network communications, file read/write times, detailed heap and thread data, ...'
+        aliases: [flightrecoder]
+        usage: '/<command> <start/stop/dump>'
+        permission: ${project.artifactId}.command.jfr
+
+permissions:
+    ${project.artifactId}.*:
+        description: Gives access to all ${project.name} Features
+        children:
+            ${project.artifactId}.commands.*: true
+
+    ${project.artifactId}.commands.*:
+        description: Gives access to all ${project.name} commands
+        children:
+            ${project.artifactId}.command.ping: true
+            ${project.artifactId}.command.ping.other: true
+            ${project.artifactId}.command.stacktrace: true
+            ${project.artifactId}.command.thread: true
+            ${project.artifactId}.command.tps: true
+            ${project.artifactId}.command.mbean: true
+            ${project.artifactId}.command.system: true
+            ${project.artifactId}.command.timing: true
+            ${project.artifactId}.command.monitor: true
+            ${project.artifactId}.command.graph: true
+            ${project.artifactId}.command.native: true
+            ${project.artifactId}.command.vm: true
+            ${project.artifactId}.command.network: true
+            ${project.artifactId}.command.tasks: true
+            ${project.artifactId}.command.jfr: true
+
+    ${project.artifactId}.command.ping.other:
+        description: 'Get the ping from other players'
+        children:
+            ${project.artifactId}.command.ping: true
